@@ -1,0 +1,66 @@
+apiVersion: blueprints.cloud.google.com/v1alpha1
+kind: BlueprintMetadata
+metadata:
+  name: terraform-google-model-armor-template
+  source:
+    sourceType: git
+    location: https://github.com/GoogleCloudPlatform/terraform-google-model-armor-template.git
+  version: 0.1.0
+  actuationTool:
+    type: Terraform
+    versions: [ ">= 1.3.0" ]
+  title: Google Cloud Model Armor Template
+  descriptions:
+    tagline: Protect Large Language Models (LLMs) from harmful inputs and abuse.
+    detailed: This module is used to create and manage a Google Cloud Model Armor template. Model Armor helps protect Large Language Models (LLMs) from harmful inputs and abuse by providing configurable detection and filtering capabilities.
+  examples:
+    - name: simple_example
+      location: examples/simple_example
+      title: Simple Model Armor Template
+  icon: https://www.gstatic.com/images/branding/product/2x/vertex_ai_64dp.png
+  documentations:
+    - title: README
+      url: ./README.md
+spec:
+  requirements:
+    roles:
+      - level: project
+        roles:
+          - roles/aiplatform.admin
+    services:
+      - aiplatform.googleapis.com
+  content:
+    variables:
+      - name: filter_config
+        description: The policy configuration for the Model Armor template. A template must have exactly one policy, which is defined by this configuration.
+        type: object
+        required: true
+      - name: location
+        description: The location for the Model Armor Template. This is a global resource and the value should be 'global'.
+        type: string
+        required: false
+        default: "global"
+      - name: name
+        description: The user-provided ID of the Model Armor template. It must be unique within the location.
+        type: string
+        required: true
+      - name: project_id
+        description: The ID of the Google Cloud project in which to create the resource.
+        type: string
+        required: true
+    variableGroups:
+      - name: General Settings
+        description: Basic configuration for the Model Armor Template.
+        variables:
+          - project_id
+          - name
+          - location
+      - name: Filter Configuration
+        description: Defines the detection and filtering policy.
+        variables:
+          - filter_config
+    outputs:
+      - name: id
+        description: The unique identifier for the Model Armor template.
+      - name: name
+        description: The resource name of the Model Armor template.
